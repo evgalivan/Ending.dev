@@ -52,21 +52,23 @@ void SetPort(uint32 port){
    Port = port;
 }
 void SetUnicast(uint32 cast){
-   ip_addr = cast;
+   uint8* tmp = (uint8*)&cast;
+   ip_addr = (*(tmp) << 24) + (*(tmp + 1) << 16) + (*(tmp + 2) << 8) + *(tmp + 3);
 }
 void SetMulticast(uint32 cast){
-   ip_addr_to = cast;
+   uint8* tmp = (uint8*)&cast;
+   ip_addr_to = (*(tmp) << 24) + (*(tmp + 1) << 16) + (*(tmp + 2) << 8) + *(tmp + 3);
 }
 
 void SetMac(uint32* cast){
     uint8* tmp = ( uint8*)cast;
-    mac_addr[2] = *(tmp++);
     mac_addr[3] = *(tmp++);
-    mac_addr[4] = *(tmp++);
-    mac_addr[5] = *(tmp++);
-    tmp+=2;
-    mac_addr[0] = *(tmp++);
+    mac_addr[2] = *(tmp++);
     mac_addr[1] = *(tmp++);
+    mac_addr[0] = *(tmp++);
+    tmp+=2;
+    mac_addr[5] = *(tmp++);
+    mac_addr[4] = *(tmp++);
 }
 
 uint16_t ip_cksum(uint32_t sum, uint8_t *buf, uint16_t len)
