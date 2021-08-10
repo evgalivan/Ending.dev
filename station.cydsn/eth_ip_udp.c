@@ -51,24 +51,20 @@ uint16_t Port = 11111;
 void SetPort(uint32 port){
    Port = port;
 }
-void SetUnicast(uint32 cast){
-   uint8* tmp = (uint8*)&cast;
-   ip_addr = (*(tmp) << 24) + (*(tmp + 1) << 16) + (*(tmp + 2) << 8) + *(tmp + 3);
+void SetUnicast(AnyFrame_u *frame){
+   ip_addr = inet_addr(frame->rF.UniHiHi, frame->rF.UniHiLo, frame->rF.UniLoHi, frame->rF.UniLoLo);
 }
-void SetMulticast(uint32 cast){
-   uint8* tmp = (uint8*)&cast;
-   ip_addr_to = (*(tmp) << 24) + (*(tmp + 1) << 16) + (*(tmp + 2) << 8) + *(tmp + 3);
+void SetMulticast(AnyFrame_u *frame){
+   ip_addr_to = inet_addr(frame->rF.MulHiHi, frame->rF.MulHiLo, frame->rF.MulLoHi, frame->rF.MulLoLo);
 }
 
-void SetMac(uint32* cast){
-    uint8* tmp = ( uint8*)cast;
-    mac_addr[3] = *(tmp++);
-    mac_addr[2] = *(tmp++);
-    mac_addr[1] = *(tmp++);
-    mac_addr[0] = *(tmp++);
-    tmp+=2;
-    mac_addr[5] = *(tmp++);
-    mac_addr[4] = *(tmp++);
+void SetMac(AnyFrame_u *frame){
+    mac_addr[0] = frame->rF.MacHiHi;
+    mac_addr[1] = frame->rF.MacHiLo;
+    mac_addr[2] = frame->rF.MacMiHi;
+    mac_addr[3] = frame->rF.MacMiLo;
+    mac_addr[4] = frame->rF.MacLoHi;
+    mac_addr[5] = frame->rF.MacLoLo;
 }
 
 uint16_t ip_cksum(uint32_t sum, uint8_t *buf, uint16_t len)

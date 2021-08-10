@@ -225,12 +225,12 @@ CY_ISR(FrameCaptured_Interrupt)
             
             switch(last_frame->eF.tag){
             case TAG_RENUM://copy to mine & inc
-                SetMac((uint32*)last_frame);
+                SetMac(last_frame);
                 last_frame->rF.MacLoLo++;// MAC inc
                 SetPort(last_frame->rF.port++);// port inc
-                SetUnicast(last_frame->eF.EF_3);
+                SetUnicast(last_frame);
                 last_frame->rF.UniLoLo++; // Unicast inc
-                SetMulticast(last_frame->eF.EF_4);
+                SetMulticast(last_frame);
                 EthHeaderMustBeUpdated = 1;// new field values must be placed into corresponding fields of Ethernet packet header     
             break;
             case TAG_TIME_STAMP:

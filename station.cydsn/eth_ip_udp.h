@@ -13,6 +13,9 @@
 #ifndef ETH_IP_UDP_H
 #define ETH_IP_UDP_H
 #include "cytypes.h"    
+    
+#include "ControlFrame.h"  
+    
 #define ETH_IP_UDP_HEAD_SIZE 42
 extern uint8 item[];
 
@@ -94,11 +97,11 @@ extern uint8 arp_frame[64];
 
 void SetPort(uint32 port);
  
-void SetUnicast(uint32 cast);
+void SetUnicast(AnyFrame_u *frame);
  
-void SetMulticast(uint32 cast);
+void SetMulticast(AnyFrame_u *frame);
 
-void SetMac(uint32* cast);
+void SetMac(AnyFrame_u *frame);
 
 
 #endif
