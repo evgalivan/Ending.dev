@@ -16,7 +16,6 @@
 #include "receiver.h"
 #include <BitCounterDec.h>
 #include <line_buf.h>
-#include <FirstFrame.h>
 #include <ControlFrame.h>
 #include "hbi.h"
 #include <KSZ8852.h>

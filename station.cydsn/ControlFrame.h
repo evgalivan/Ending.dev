@@ -88,7 +88,7 @@ typedef struct {
     uint32 disc_period: 24; // discretisation period
     uint32 tag: 8; 
     uint32 time_corr: 24; // time correction
-    uint32 CRC: 8; //
+    uint8 CRC; //
     uint32 sec: 32; // 
     uint32 usec: 24;
     uint32 : 8;
