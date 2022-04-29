@@ -11,8 +11,11 @@
 */
 #ifndef MAJOR
     #define MAJOR
+
+    #define MAJOR_COUNTER (3)
     #include <cytypes.h>
     #include <stdlib.h>
+
 typedef struct major_s{
     size_t Flag;
     size_t Counter;
@@ -21,6 +24,12 @@ typedef struct major_s{
     void* Pattern;
 }major_t;    
    
+
 int8 ComparePattern(void* ToCheck, major_t Pattern);
+
+void* CheckTS(void* ToCheck);
+void* CheckRenumber(void* ToCheck);
+
+
     #endif
 /* [] END OF FILE */

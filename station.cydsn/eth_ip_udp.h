@@ -91,7 +91,9 @@ int sendPacket(void *header, uint16 size);
 extern uint8_t mac_addr[6];
 extern uint8_t IPv4multicast[6];
 extern uint8_t remote_mac_addr[6];
+
 extern int EthHeaderMustBeUpdated;
+extern int SequenceNumber;
 
 extern uint8 arp_frame[64];
 

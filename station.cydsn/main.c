@@ -119,6 +119,7 @@ int main(void)
             if ( EthHeaderMustBeUpdated ){
                 ConfigureMAC( mac_addr);
                 packet_size = RefreshItem(NUMBER_OF_SECTIONS*sizeof(in_buf));
+                EthHeaderMustBeUpdated = 0;
             }
             StartNewUDPPacket((void*)&item, packet_size);
             SectionsToSend = NUMBER_OF_SECTIONS;

@@ -43,16 +43,18 @@ uint8_t remote_mac_addr[6] = {0x80,0xE8,0x2C,0xC2,0x70,0xF9};
 uint32_t ip_addr = inet_addr(192,168,0,5);
 uint32_t ip_addr_to = inet_addr(230,1,1,0);
 uint32_t remote_ip_addr = inet_addr(192,168,0,2);
+
 int EthHeaderMustBeUpdated = 1;
+int SequenceNumber = 0;
 
 // port
 uint16_t Port = 11111;
 
 void SetPort(uint32 port){
-   Port = port;
+   Port = port + SequenceNumber;
 }
 void SetUnicast(AnyFrame_u *frame){
-   ip_addr = inet_addr(frame->rF.UniHiHi, frame->rF.UniHiLo, frame->rF.UniLoHi, frame->rF.UniLoLo);
+   ip_addr = inet_addr(frame->rF.UniHiHi, frame->rF.UniHiLo, frame->rF.UniLoHi, (frame->rF.UniLoLo + SequenceNumber));
 }
 void SetMulticast(AnyFrame_u *frame){
    ip_addr_to = inet_addr(frame->rF.MulHiHi, frame->rF.MulHiLo, frame->rF.MulLoHi, frame->rF.MulLoLo);
@@ -64,7 +66,7 @@ void SetMac(AnyFrame_u *frame){
     mac_addr[2] = frame->rF.MacMiHi;
     mac_addr[3] = frame->rF.MacMiLo;
     mac_addr[4] = frame->rF.MacLoHi;
-    mac_addr[5] = frame->rF.MacLoLo;
+    mac_addr[5] = frame->rF.MacLoLo + SequenceNumber;
 }
 
 uint16_t ip_cksum(uint32_t sum, uint8_t *buf, uint16_t len)

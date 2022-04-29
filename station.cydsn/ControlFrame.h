@@ -83,7 +83,8 @@ typedef struct {
     uint32 MulHiLo:8;
     uint32 MulHiHi:8;
 }renumFrame_t;
-#define MAX_USEC (1024000L)
+#define MAX_USEC (1000000L)
+#define MAX_TIC (1024000L)
 typedef struct {
     uint32 disc_period: 24; // discretisation period
     uint32 tag: 8; 

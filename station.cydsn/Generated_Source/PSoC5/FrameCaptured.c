@@ -37,6 +37,7 @@
 #include <eth_ip_udp.h>
 #include <sender.h>
 #include <receiver.h>
+#include <major.h>
 
     
     
@@ -224,21 +225,18 @@ CY_ISR(FrameCaptured_Interrupt)
             AnyFrame_u *last_frame =  &in_buf.Frames[FRAME_NUM-1];
             
             switch(last_frame->eF.tag){
-            case TAG_RENUM://copy to mine & inc
-                SetMac(last_frame);
-                last_frame->rF.MacLoLo++;// MAC inc
-                SetPort(last_frame->rF.port++);// port inc
-                SetUnicast(last_frame);
-                last_frame->rF.UniLoLo++; // Unicast inc
-                SetMulticast(last_frame);
-                EthHeaderMustBeUpdated = 1;// new field values must be placed into corresponding fields of Ethernet packet header     
+            case TAG_RENUM:
+//                SetMac(last_frame);
+//                last_frame->rF.MacLoLo++;// MAC inc
+//                SetPort(last_frame->rF.port++);// port inc
+//                SetUnicast(last_frame);
+//                last_frame->rF.UniLoLo++; // Unicast inc
+//                SetMulticast(last_frame);
+//                EthHeaderMustBeUpdated = 1;// new field values must be placed into corresponding fields of Ethernet packet header     
+                last_frame = (AnyFrame_u*) CheckRenumber((void*)last_frame);
             break;
             case TAG_TIME_STAMP:
-                last_frame->TimeStamp.usec += last_frame->TimeStamp.disc_period;
-                if(last_frame->TimeStamp.usec >= MAX_USEC){
-                    last_frame->TimeStamp.usec -= MAX_USEC;
-                    last_frame->TimeStamp.sec++;
-                }
+                last_frame = (AnyFrame_u*) CheckTS((void*)last_frame);
             break;
             default:
             break;
