@@ -51,10 +51,10 @@ int SequenceNumber = 0;
 uint16_t Port = 11111;
 
 void SetPort(uint32 port){
-   Port = port + SequenceNumber;
+   Port = port ;
 }
 void SetUnicast(AnyFrame_u *frame){
-   ip_addr = inet_addr(frame->rF.UniHiHi, frame->rF.UniHiLo, frame->rF.UniLoHi, (frame->rF.UniLoLo + SequenceNumber));
+   ip_addr = inet_addr(frame->rF.UniHiHi, frame->rF.UniHiLo, frame->rF.UniLoHi, (frame->rF.UniLoLo));
 }
 void SetMulticast(AnyFrame_u *frame){
    ip_addr_to = inet_addr(frame->rF.MulHiHi, frame->rF.MulHiLo, frame->rF.MulLoHi, frame->rF.MulLoLo);
@@ -66,7 +66,7 @@ void SetMac(AnyFrame_u *frame){
     mac_addr[2] = frame->rF.MacMiHi;
     mac_addr[3] = frame->rF.MacMiLo;
     mac_addr[4] = frame->rF.MacLoHi;
-    mac_addr[5] = frame->rF.MacLoLo + SequenceNumber;
+    mac_addr[5] = frame->rF.MacLoLo;
 }
 
 uint16_t ip_cksum(uint32_t sum, uint8_t *buf, uint16_t len)
@@ -105,6 +105,7 @@ uint16 eth_reply(uint8_t* buf, uint16_t len)
     memcpy(frame->to_addr, IPv4multicast, 6);
 //    memcpy(frame->to_addr, remote_mac_addr, 6);
     memcpy(frame->from_addr, mac_addr, 6);
+    frame->from_addr[5] += SequenceNumber;
     frame->type = ETH_TYPE_IP;
     return ( len + sizeof(eth_frame_t));
 }
@@ -138,7 +139,7 @@ uint16_t ip_reply(uint8_t* buf, uint16_t len)
     packet->cksum = 0;
     packet->to_addr = ip_addr_to;
 //    packet->to_addr = remote_ip_addr;
-    packet->from_addr = ip_addr;
+    packet->from_addr = ip_addr + (SequenceNumber<<24);
     packet->cksum = ip_cksum(0, (void*)packet, sizeof(ip_packet_t));
 
     // Заворачиваем в Ethernet-фрейм и отправляем
@@ -156,7 +157,7 @@ uint16_t udp_reply(uint8_t* buf, uint16_t len)
 
     // Меняем местами порт отправителя и получателя
     
-    udp->from_port = htons(Port);
+    udp->from_port = htons(Port + SequenceNumber);
     udp->to_port = udp->from_port;
 
     // Длина пакета
