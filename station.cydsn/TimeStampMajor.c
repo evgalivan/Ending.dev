@@ -38,6 +38,7 @@ void* CheckTS(void* ToCheck){
             ts_compare.Counter++;
             if(ts_compare.Counter >= MAJOR_COUNTER){
                 ts_keep = *(TimeStamp_t*)ToCheck;
+                SequenceNumber = ts_keep.CRC;
                 ts_keep.CRC++;
 
                 switch(ts_keep.disc_period){//
@@ -55,7 +56,6 @@ void* CheckTS(void* ToCheck){
 
                 DelayCompensation = ts_keep.time_corr;
 
-                SequenceNumber = ts_keep.CRC;
 
                 EthHeaderMustBeUpdated =1;
 
